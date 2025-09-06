@@ -1166,6 +1166,14 @@
             const elevenlabsTtsVoice = localStorage.getItem('elevenlabsTtsVoice') || '21m00Tcm4TlvDq8ikWAM';
             const yandexTtsApiKey = localStorage.getItem('yandexTtsApiKey') || (window.API_KEYS ? window.API_KEYS.yandex : '');
             const yandexTtsVoice = localStorage.getItem('yandexTtsVoice') || 'jane';
+            
+            console.log('API Keys Debug:', {
+                windowAPIKeys: window.API_KEYS ? 'Present' : 'Missing',
+                elevenlabsFromAPI: window.API_KEYS ? window.API_KEYS.elevenlabs : 'N/A',
+                yandexFromAPI: window.API_KEYS ? window.API_KEYS.yandex : 'N/A',
+                elevenlabsTtsApiKey: elevenlabsTtsApiKey ? 'Present' : 'Missing',
+                yandexTtsApiKey: yandexTtsApiKey ? 'Present' : 'Missing'
+            });
             document.getElementById('elevenlabsTtsApiKey').value = elevenlabsTtsApiKey;
             document.getElementById('elevenlabsTtsVoice').value = elevenlabsTtsVoice;
             document.getElementById('yandexTtsApiKey').value = yandexTtsApiKey;
@@ -1984,6 +1992,13 @@
             const proxyUrl = localStorage.getItem('proxyUrl') || 'http://localhost:3000';
             const apiKey = localStorage.getItem('yandexTtsApiKey');
             const voice = localStorage.getItem('yandexTtsVoice') || 'jane';
+            
+            console.log('Yandex TTS Debug:', {
+                proxyUrl,
+                apiKey: apiKey ? 'Present' : 'Missing',
+                voice,
+                text: text.substring(0, 50) + '...'
+            });
             
             const response = await fetch(`${proxyUrl}/api/tts/generate`, {
                 method: 'POST',
