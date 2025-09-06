@@ -1281,7 +1281,13 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 conversationHistory.push({ role: 'assistant', content: text });
                 
-                showNotification('Озвучка недоступна, показан текст');
+                // Пытаемся использовать браузерный TTS как fallback
+                try {
+                    await speakWithBrowser(text);
+                } catch (browserError) {
+                    console.error('Browser TTS also failed:', browserError);
+                    showNotification('Озвучка недоступна, показан текст');
+                }
             }
         }
 
@@ -2020,6 +2026,19 @@
                 }
             } catch (error) {
                 console.error('TTS error:', error);
+                
+                // Если внешний TTS не работает, пробуем браузерный
+                const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+                if (ttsProvider !== 'browser') {
+                    console.log('Falling back to browser TTS...');
+                    try {
+                        await speakWithBrowser(text);
+                        return;
+                    } catch (browserError) {
+                        console.error('Browser TTS also failed:', browserError);
+                    }
+                }
+                
                 showNotification('Ошибка озвучки: ' + error.message);
             }
         }
