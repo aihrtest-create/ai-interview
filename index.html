@@ -1282,8 +1282,10 @@
                 conversationHistory.push({ role: 'assistant', content: text });
                 
                 // Пытаемся использовать браузерный TTS как fallback
+                console.log('Trying browser TTS fallback...');
                 try {
                     await speakWithBrowser(text);
+                    console.log('Browser TTS fallback successful!');
                 } catch (browserError) {
                     console.error('Browser TTS also failed:', browserError);
                     showNotification('Озвучка недоступна, показан текст');
