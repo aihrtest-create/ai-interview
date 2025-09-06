@@ -1239,7 +1239,29 @@
 
         // Добавление сообщения с задержкой TTS
         async function addMessageWithTtsDelay(text, time, messageDiv, messagesContainer) {
-            // Показываем индикатор печати
+            const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+            
+            // Если браузерный TTS, показываем сообщение сразу
+            if (ttsProvider === 'browser') {
+                showTypingIndicator(false);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        <div>${text}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                conversationHistory.push({ role: 'assistant', content: text });
+                
+                // Озвучиваем браузерным TTS
+                await speakText(text);
+                return;
+            }
+            
+            // Для внешних TTS показываем индикатор печати
             showTypingIndicator(true);
             
             try {
@@ -1276,7 +1298,7 @@
                 // Скрываем индикатор печати
                 showTypingIndicator(false);
                 
-                // Показываем сообщение без озвучки
+                // Показываем сообщение
                 messageDiv.innerHTML = `
                     <div class="message-avatar">AI</div>
                     <div class="message-content">
@@ -1306,18 +1328,28 @@
             const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
             const ttsApiMode = localStorage.getItem('ttsApiMode') || 'direct';
             
-            if (ttsProvider === 'elevenlabs') {
-                if (ttsApiMode === 'proxy') {
-                    return await generateElevenLabsAudioViaProxy(text);
-                } else {
-                    return await generateElevenLabsAudio(text);
+            // Если выбран браузерный TTS, не генерируем аудио заранее
+            if (ttsProvider === 'browser') {
+                return null; // Браузерный TTS не требует предварительной генерации
+            }
+            
+            try {
+                if (ttsProvider === 'elevenlabs') {
+                    if (ttsApiMode === 'proxy') {
+                        return await generateElevenLabsAudioViaProxy(text);
+                    } else {
+                        return await generateElevenLabsAudio(text);
+                    }
+                } else if (ttsProvider === 'yandex') {
+                    if (ttsApiMode === 'proxy') {
+                        return await generateYandexAudioViaProxy(text);
+                    } else {
+                        return await generateYandexAudio(text);
+                    }
                 }
-            } else if (ttsProvider === 'yandex') {
-                if (ttsApiMode === 'proxy') {
-                    return await generateYandexAudioViaProxy(text);
-                } else {
-                    return await generateYandexAudio(text);
-                }
+            } catch (error) {
+                console.log('External TTS failed, falling back to browser TTS:', error.message);
+                return null; // Fallback to browser TTS
             }
             
             throw new Error('Unsupported TTS provider for audio generation');
