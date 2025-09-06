@@ -2,7 +2,7 @@
 api-keys.js
 
 # Публичный файл с API ключами для GitHub Pages
-# api-keys-public.js - этот файл попадает в Git
+# api-keys-public.js - этот файл попадает в Git (автоматически обновляется при деплое)
 
 # Node modules
 node_modules/

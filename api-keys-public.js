@@ -1,6 +1,6 @@
 // API Keys Configuration for GitHub Pages
-// Этот файл содержит заглушки для API ключей
-// Замените на реальные ключи после деплоя
+// Этот файл автоматически обновляется при деплое через GitHub Actions
+// Реальные ключи подставляются из GitHub Secrets
 
 window.API_KEYS = {
     // ElevenLabs API Key
