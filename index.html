@@ -1161,10 +1161,10 @@
             document.getElementById('elevenlabsSttApiKey').value = elevenlabsSttApiKey;
             document.getElementById('yandexSttApiKey').value = yandexSttApiKey;
             
-            // TTS настройки
-            const elevenlabsTtsApiKey = localStorage.getItem('elevenlabsTtsApiKey') || (window.API_KEYS ? window.API_KEYS.elevenlabs : '');
+            // TTS настройки - ПРИНУДИТЕЛЬНО используем API ключи из window.API_KEYS
+            const elevenlabsTtsApiKey = window.API_KEYS ? window.API_KEYS.elevenlabs : '';
             const elevenlabsTtsVoice = localStorage.getItem('elevenlabsTtsVoice') || '21m00Tcm4TlvDq8ikWAM';
-            const yandexTtsApiKey = localStorage.getItem('yandexTtsApiKey') || (window.API_KEYS ? window.API_KEYS.yandex : '');
+            const yandexTtsApiKey = window.API_KEYS ? window.API_KEYS.yandex : '';
             const yandexTtsVoice = localStorage.getItem('yandexTtsVoice') || 'jane';
             
             console.log('API Keys Debug:', {
@@ -1964,7 +1964,7 @@
         // Генерация аудио ElevenLabs через прокси (без воспроизведения)
         async function generateElevenLabsAudioViaProxy(text) {
             const proxyUrl = localStorage.getItem('proxyUrl') || 'http://localhost:3000';
-            const apiKey = localStorage.getItem('elevenlabsTtsApiKey');
+            const apiKey = window.API_KEYS ? window.API_KEYS.elevenlabs : '';
             const voice = localStorage.getItem('elevenlabsTtsVoice') || '21m00Tcm4TlvDq8ikWAM';
             
             const response = await fetch(`${proxyUrl}/api/tts/generate`, {
@@ -2022,7 +2022,7 @@
         // Генерация аудио Yandex через прокси (без воспроизведения)
         async function generateYandexAudioViaProxy(text) {
             const proxyUrl = localStorage.getItem('proxyUrl') || 'http://localhost:3000';
-            const apiKey = localStorage.getItem('yandexTtsApiKey');
+            const apiKey = window.API_KEYS ? window.API_KEYS.yandex : '';
             const voice = localStorage.getItem('yandexTtsVoice') || 'jane';
             
             console.log('Yandex TTS Debug:', {
@@ -2299,9 +2299,9 @@
         // Получение API ключа для TTS
         function getTtsApiKey(provider) {
             if (provider === 'elevenlabs') {
-                return localStorage.getItem('elevenlabsTtsApiKey');
+                return window.API_KEYS ? window.API_KEYS.elevenlabs : '';
             } else if (provider === 'yandex') {
-                return localStorage.getItem('yandexTtsApiKey');
+                return window.API_KEYS ? window.API_KEYS.yandex : '';
             }
             return null;
         }
