@@ -1,0 +1,22 @@
+# API Keys - не добавляем в Git для безопасности
+api-keys.js
+
+# Публичный файл с API ключами для GitHub Pages
+# api-keys-public.js - этот файл попадает в Git
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Backup files
+*.backup
