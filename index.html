@@ -965,8 +965,7 @@
             const provider = localStorage.getItem('llmProvider') || 'openrouter';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
-            // Для Gemini всегда используем прокси (работает в РФ)
-            if (apiMode === 'proxy' || provider === 'gemini') {
+            if (apiMode === 'proxy') {
                 return await callProxyAPI(userMessage, provider, isTest);
             } else {
                 if (provider === 'openrouter') {
@@ -2268,8 +2267,7 @@ ${conversationHistory.map(msg =>
             const provider = localStorage.getItem('llmProvider') || 'openrouter';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
-            // Для Gemini всегда используем прокси (работает в РФ)
-            if (apiMode === 'proxy' || provider === 'gemini') {
+            if (apiMode === 'proxy') {
                 return await callProxyAPI(userMessage, provider, isTest, isReport);
             } else {
                 if (provider === 'openrouter') {
