@@ -56,7 +56,10 @@ jobs:
               openai: '${{ secrets.OPENAI_API_KEY }}',
               
               // Gemini API Key
-              gemini: '${{ secrets.GEMINI_API_KEY }}'
+              gemini: '${{ secrets.GEMINI_API_KEY }}',
+              
+              // Deepgram API Key
+              deepgram: '${{ secrets.DEEPGRAM_API_KEY }}'
           };
           EOF
 
