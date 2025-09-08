@@ -12,7 +12,7 @@
             <h1>🤖 AI Interview Trainer</h1>
             <p>Подготовьтесь к собеседованию с помощью ИИ</p>
             <div style="margin-top: 20px; padding: 10px; background: rgba(34, 211, 238, 0.1); border-radius: 10px; border: 1px solid rgba(34, 211, 238, 0.3);">
-                <p style="color: var(--accent); font-size: 0.9rem;">✨ GitHub Pages деплой работает! Готов к настройке Vercel для полного функционала.</p>
+                <p style="color: var(--accent); font-size: 0.9rem;">🚀 Полный деплой готов! GitHub Pages + Vercel работают. Добавьте Environment Variables в Vercel для полного функционала.</p>
             </div>
         </div>
 
@@ -457,9 +457,7 @@
         function getOptimalProxyUrl() {
             // Если это GitHub Pages (продакшн)
             if (window.location.hostname.includes('github.io')) {
-                // Здесь нужно будет указать ваш Vercel URL после деплоя
-                // Пока возвращаем localhost для тестирования
-                return 'http://localhost:3000';
+                return 'https://ai-interview-mu-nine.vercel.app';
             }
             // Если это локальная разработка
             return 'http://localhost:3000';
