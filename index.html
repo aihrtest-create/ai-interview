@@ -112,8 +112,18 @@
         </div>
 
         <div class="form-group" id="proxyUrlGroup" style="display: none;">
-            <label for="proxyUrl">🌐 URL прокси-сервера</label>
+            <label for="proxyUrl">🌐 URL прокси-сервера для LLM</label>
             <input type="text" id="proxyUrl" placeholder="http://localhost:3000" onchange="saveSettings()">
+        </div>
+
+        <div class="form-group" id="sttProxyUrlGroup" style="display: none;">
+            <label for="sttProxyUrl">🎤 URL прокси-сервера для STT</label>
+            <input type="text" id="sttProxyUrl" placeholder="https://ai-interview-mu-nine.vercel.app" onchange="saveSettings()">
+        </div>
+
+        <div class="form-group" id="ttsProxyUrlGroup" style="display: none;">
+            <label for="ttsProxyUrl">🔊 URL прокси-сервера для TTS</label>
+            <input type="text" id="ttsProxyUrl" placeholder="https://ai-interview-mu-nine.vercel.app" onchange="saveSettings()">
         </div>
 
         <!-- OpenRouter Section -->
@@ -428,6 +438,8 @@
             loadSettings();
             updateProviderSettings();
             updateApiModeDisplay();
+            updateSttApiModeDisplay();
+            updateTtsApiModeDisplay();
             updateSttSettings();
             updateTtsSettings();
             testConnection();
@@ -506,6 +518,30 @@
                 proxyUrlGroup.style.display = 'block';
             } else {
                 proxyUrlGroup.style.display = 'none';
+            }
+        }
+
+        // Обновление отображения режима STT API
+        function updateSttApiModeDisplay() {
+            const sttApiMode = document.getElementById('sttApiMode').value;
+            const sttProxyUrlGroup = document.getElementById('sttProxyUrlGroup');
+            
+            if (sttApiMode === 'proxy') {
+                sttProxyUrlGroup.style.display = 'block';
+            } else {
+                sttProxyUrlGroup.style.display = 'none';
+            }
+        }
+
+        // Обновление отображения режима TTS API
+        function updateTtsApiModeDisplay() {
+            const ttsApiMode = document.getElementById('ttsApiMode').value;
+            const ttsProxyUrlGroup = document.getElementById('ttsProxyUrlGroup');
+            
+            if (ttsApiMode === 'proxy') {
+                ttsProxyUrlGroup.style.display = 'block';
+            } else {
+                ttsProxyUrlGroup.style.display = 'none';
             }
         }
 
@@ -653,6 +689,8 @@
             const provider = document.getElementById('llmProvider').value;
             const apiMode = document.getElementById('apiMode').value;
             const proxyUrl = document.getElementById('proxyUrl').value;
+            const sttProxyUrl = document.getElementById('sttProxyUrl').value;
+            const ttsProxyUrl = document.getElementById('ttsProxyUrl').value;
             const systemPrompt = document.getElementById('systemPrompt').value;
             const reportPrompt = document.getElementById('reportPrompt').value;
             const sttProvider = document.getElementById('sttProvider').value;
@@ -663,6 +701,8 @@
             localStorage.setItem('llmProvider', provider);
             localStorage.setItem('apiMode', apiMode);
             localStorage.setItem('proxyUrl', proxyUrl);
+            localStorage.setItem('sttProxyUrl', sttProxyUrl);
+            localStorage.setItem('ttsProxyUrl', ttsProxyUrl);
             localStorage.setItem('systemPrompt', systemPrompt);
             localStorage.setItem('reportPrompt', reportPrompt);
             localStorage.setItem('sttProvider', sttProvider);
@@ -700,6 +740,8 @@
             const provider = localStorage.getItem('llmProvider') || 'openrouter';
             const apiMode = localStorage.getItem('apiMode') || getOptimalApiMode();
             const proxyUrl = localStorage.getItem('proxyUrl') || getOptimalProxyUrl();
+            const sttProxyUrl = localStorage.getItem('sttProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
+            const ttsProxyUrl = localStorage.getItem('ttsProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
             const systemPrompt = localStorage.getItem('systemPrompt') || document.getElementById('systemPrompt').value;
             const reportPrompt = localStorage.getItem('reportPrompt') || document.getElementById('reportPrompt').value;
             const sttProvider = localStorage.getItem('sttProvider') || 'browser';
@@ -711,6 +753,8 @@
             document.getElementById('llmProvider').value = provider;
             document.getElementById('apiMode').value = apiMode;
             document.getElementById('proxyUrl').value = proxyUrl;
+            document.getElementById('sttProxyUrl').value = sttProxyUrl;
+            document.getElementById('ttsProxyUrl').value = ttsProxyUrl;
             document.getElementById('systemPrompt').value = systemPrompt;
             document.getElementById('reportPrompt').value = reportPrompt;
             document.getElementById('sttProvider').value = sttProvider;
@@ -1336,7 +1380,7 @@
 
         // Прокси STT API
         async function callProxySTT(audioBlob, provider) {
-            const proxyUrl = localStorage.getItem('proxyUrl') || getOptimalProxyUrl();
+            const proxyUrl = localStorage.getItem('sttProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
             
             const formData = new FormData();
             // Определяем правильное расширение файла на основе mimeType
@@ -1670,7 +1714,7 @@
 
         // Озвучка через прокси
         async function speakWithProxy(text, provider) {
-            const proxyUrl = localStorage.getItem('proxyUrl') || getOptimalProxyUrl();
+            const proxyUrl = localStorage.getItem('ttsProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
             
             const response = await fetch(`${proxyUrl}/api/tts`, {
                 method: 'POST',
