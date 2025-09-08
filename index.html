@@ -763,13 +763,13 @@
             document.getElementById('ttsApiMode').value = ttsApiMode;
             
             // OpenRouter
-            const openrouterApiKey = localStorage.getItem('openrouterApiKey') || '';
+            const openrouterApiKey = localStorage.getItem('openrouterApiKey') || (window.API_KEYS ? window.API_KEYS.openrouter : '') || '';
             const openrouterModel = localStorage.getItem('openrouterModel') || 'openai/gpt-4o';
             document.getElementById('openrouterApiKey').value = openrouterApiKey;
             document.getElementById('openrouterModel').value = openrouterModel;
             
             // Gemini
-            const geminiApiKey = localStorage.getItem('geminiApiKey') || 'AIzaSyDIMqABFiNj0FudmRT9TjfYtvHLkRwgjgE';
+            const geminiApiKey = localStorage.getItem('geminiApiKey') || (window.API_KEYS ? window.API_KEYS.gemini : '') || 'AIzaSyDIMqABFiNj0FudmRT9TjfYtvHLkRwgjgE';
             const geminiModel = localStorage.getItem('geminiModel') || 'gemini-2.0-flash-exp';
             document.getElementById('geminiApiKey').value = geminiApiKey;
             document.getElementById('geminiModel').value = geminiModel;
@@ -1009,7 +1009,7 @@
             
             if (provider === 'openrouter') {
                 endpoint = `${proxyUrl}/api/openrouter`;
-                const apiKey = localStorage.getItem('openrouterApiKey');
+                const apiKey = localStorage.getItem('openrouterApiKey') || (window.API_KEYS ? window.API_KEYS.openrouter : '');
                 const model = localStorage.getItem('openrouterModel') || 'openai/gpt-4o';
                 
                 headers = {
@@ -1071,7 +1071,7 @@
 
         // OpenRouter API
         async function callOpenRouterAPI(userMessage, isTest = false) {
-            const apiKey = localStorage.getItem('openrouterApiKey');
+            const apiKey = localStorage.getItem('openrouterApiKey') || (window.API_KEYS ? window.API_KEYS.openrouter : '');
             const model = localStorage.getItem('openrouterModel') || 'openai/gpt-4o';
             
             if (!apiKey) {
@@ -2336,7 +2336,7 @@ ${conversationHistory.map(msg =>
             
             if (provider === 'openrouter') {
                 endpoint = `${proxyUrl}/api/openrouter`;
-                const apiKey = localStorage.getItem('openrouterApiKey');
+                const apiKey = localStorage.getItem('openrouterApiKey') || (window.API_KEYS ? window.API_KEYS.openrouter : '');
                 const model = localStorage.getItem('openrouterModel') || 'openai/gpt-4o';
                 
                 headers = {
