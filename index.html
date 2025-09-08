@@ -455,12 +455,8 @@
 
         // Автоматическое определение URL прокси-сервера
         function getOptimalProxyUrl() {
-            // Если это GitHub Pages (продакшн)
-            if (window.location.hostname.includes('github.io')) {
-                return 'https://ai-interview-mu-nine.vercel.app';
-            }
-            // Если это локальная разработка
-            return 'http://localhost:3000';
+            // По умолчанию используем Vercel для всех случаев
+            return 'https://ai-interview-mu-nine.vercel.app';
         }
 
         // Функция начала интервью
@@ -925,7 +921,8 @@
             const provider = localStorage.getItem('llmProvider') || 'openrouter';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
-            if (apiMode === 'proxy') {
+            // Для Gemini всегда используем прокси (работает в РФ)
+            if (apiMode === 'proxy' || provider === 'gemini') {
                 return await callProxyAPI(userMessage, provider, isTest);
             } else {
                 if (provider === 'openrouter') {
@@ -2227,7 +2224,8 @@ ${conversationHistory.map(msg =>
             const provider = localStorage.getItem('llmProvider') || 'openrouter';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
-            if (apiMode === 'proxy') {
+            // Для Gemini всегда используем прокси (работает в РФ)
+            if (apiMode === 'proxy' || provider === 'gemini') {
                 return await callProxyAPI(userMessage, provider, isTest, isReport);
             } else {
                 if (provider === 'openrouter') {
