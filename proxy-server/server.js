@@ -10,7 +10,15 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../')));
+
+// Обслуживание статических файлов
+if (process.env.VERCEL) {
+    // В Vercel - статические файлы в корне проекта
+    app.use(express.static(path.join(__dirname, '../')));
+} else {
+    // Локально - статические файлы в родительской папке
+    app.use(express.static(path.join(__dirname, '../')));
+}
 
 // Настройка multer для загрузки файлов
 const upload = multer({ 
