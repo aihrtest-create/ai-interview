@@ -6,6 +6,7 @@ GEMINI_API_KEY=ваш_gemini_ключ
 ELEVENLABS_API_KEY=ваш_elevenlabs_ключ
 YANDEX_API_KEY=ваш_yandex_ключ
 DEEPGRAM_API_KEY=ваш_deepgram_ключ
+SPEECHIFY_API_KEY=ваш_speechify_ключ
 
 # Инструкция:
 # 1. Откройте ваш проект в Vercel
@@ -14,5 +15,5 @@ DEEPGRAM_API_KEY=ваш_deepgram_ключ
 #    - Name: OPENROUTER_API_KEY
 #    - Value: ваш реальный API ключ
 #    - Environment: Production, Preview, Development (выберите все)
-# 4. Повторите для всех переменных
+# 4. Повторите для всех 6 переменных
 # 5. Сохраните и передеплойте проект

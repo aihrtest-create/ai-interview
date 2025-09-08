@@ -33,6 +33,21 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Proxy server is running' });
 });
 
+// Environment variables check endpoint
+app.get('/api/env-check', (req, res) => {
+    res.json({
+        status: 'OK',
+        environment: {
+            OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? 'Present' : 'Missing',
+            GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'Present' : 'Missing',
+            ELEVENLABS_API_KEY: process.env.ELEVENLABS_API_KEY ? 'Present' : 'Missing',
+            YANDEX_API_KEY: process.env.YANDEX_API_KEY ? 'Present' : 'Missing',
+            DEEPGRAM_API_KEY: process.env.DEEPGRAM_API_KEY ? 'Present' : 'Missing',
+            SPEECHIFY_API_KEY: process.env.SPEECHIFY_API_KEY ? 'Present' : 'Missing'
+        }
+    });
+});
+
 
 // OpenRouter API proxy
 app.post('/api/openrouter', async (req, res) => {
@@ -322,6 +337,7 @@ async function callYandexTTS(text, voice, apiKey) {
 async function callSpeechifyTTS(text, voice, apiKey) {
     try {
         console.log('Speechify TTS request:', { text: text.substring(0, 50) + '...', voice, apiKey: apiKey ? 'Present' : 'Missing' });
+        console.log('Environment SPEECHIFY_API_KEY:', process.env.SPEECHIFY_API_KEY ? 'Present' : 'Missing');
         
         // Используем API ключ напрямую (новый метод аутентификации)
         const response = await axios.post('https://api.sws.speechify.com/v1/tts/speech', {
