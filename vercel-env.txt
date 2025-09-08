@@ -1,0 +1,18 @@
+# Environment Variables для Vercel
+# Скопируйте эти переменные в настройки Vercel проекта
+
+OPENROUTER_API_KEY=ваш_openrouter_ключ
+GEMINI_API_KEY=ваш_gemini_ключ
+ELEVENLABS_API_KEY=ваш_elevenlabs_ключ
+YANDEX_API_KEY=ваш_yandex_ключ
+DEEPGRAM_API_KEY=ваш_deepgram_ключ
+
+# Инструкция:
+# 1. Откройте ваш проект в Vercel
+# 2. Перейдите в Settings → Environment Variables
+# 3. Добавьте каждую переменную:
+#    - Name: OPENROUTER_API_KEY
+#    - Value: ваш реальный API ключ
+#    - Environment: Production, Preview, Development (выберите все)
+# 4. Повторите для всех переменных
+# 5. Сохраните и передеплойте проект
