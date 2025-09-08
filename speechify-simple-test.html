@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speechify Simple Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Speechify Simple Test</h1>
+        <p>Простой тест Speechify API с детальным логированием</p>
+        
+        <div class="form-group">
+            <label for="apiKey">API Key:</label>
+            <input type="password" id="apiKey" placeholder="Введите ваш Speechify API ключ">
+        </div>
+        
+        <div class="form-group">
+            <label for="text">Текст:</label>
+            <textarea id="text" rows="2">Hello</textarea>
+        </div>
+        
+        <button onclick="testAPI()">🧪 Тестировать API</button>
+        <button onclick="testWithProxy()">🔄 Тестировать через прокси</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Результат:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const apiKey = document.getElementById('apiKey').value;
+            const text = document.getElementById('text').value;
+            
+            if (!apiKey) {
+                showResult('Ошибка: Введите API ключ', 'error');
+                return;
+            }
+            
+            showResult('Тестирование...', '');
+            
+            try {
+                console.log('=== ТЕСТ SPEECHIFY API ===');
+                console.log('API Key:', apiKey.substring(0, 10) + '...');
+                console.log('Text:', text);
+                
+                const requestBody = {
+                    input: text,
+                    voice_id: 'default',
+                    audio_format: 'mp3'
+                };
+                
+                console.log('Request body:', requestBody);
+                
+                const response = await fetch('https://api.sws.speechify.com/v1/audio/speech', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    console.log('Audio blob size:', audioBlob.size);
+                    showResult('✅ Успешно! Аудио получено', 'success');
+                    playAudio(audioBlob);
+                } else {
+                    const errorText = await response.text();
+                    console.log('Error response:', errorText);
+                    showResult(`❌ Ошибка ${response.status}: ${errorText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                showResult(`❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testWithProxy() {
+            const apiKey = document.getElementById('apiKey').value;
+            const text = document.getElementById('text').value;
+            
+            if (!apiKey) {
+                showResult('Ошибка: Введите API ключ', 'error');
+                return;
+            }
+            
+            showResult('Тестирование через прокси...', '');
+            
+            try {
+                console.log('=== ТЕСТ ЧЕРЕЗ ПРОКСИ ===');
+                
+                const requestBody = {
+                    text: text,
+                    provider: 'speechify',
+                    voice: 'default',
+                    apiKey: apiKey
+                };
+                
+                console.log('Request body:', requestBody);
+                
+                const response = await fetch('https://ai-interview-mu-nine.vercel.app/api/tts/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    console.log('Audio blob size:', audioBlob.size);
+                    showResult('✅ Успешно через прокси! Аудио получено', 'success');
+                    playAudio(audioBlob);
+                } else {
+                    const errorText = await response.text();
+                    console.log('Error response:', errorText);
+                    showResult(`❌ Ошибка прокси ${response.status}: ${errorText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Proxy test error:', error);
+                showResult(`❌ Ошибка прокси: ${error.message}`, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const result = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            result.style.display = 'block';
+            result.className = `result ${type}`;
+            resultContent.innerHTML = message;
+        }
+        
+        function playAudio(audioBlob) {
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            
+            const resultContent = document.getElementById('resultContent');
+            resultContent.innerHTML += `<br><br><audio controls><source src="${audioUrl}" type="audio/mpeg">Ваш браузер не поддерживает аудио элемент.</audio>`;
+            
+            audio.play().catch(e => {
+                console.error('Audio play error:', e);
+                resultContent.innerHTML += `<br><br>❌ Ошибка воспроизведения: ${e.message}`;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -326,7 +326,8 @@ async function callSpeechifyTTS(text, voice, apiKey) {
         // Используем API ключ напрямую (новый метод аутентификации)
         const response = await axios.post('https://api.sws.speechify.com/v1/audio/speech', {
             input: text,
-            voiceId: voice
+            voice_id: voice,
+            audio_format: 'mp3'
         }, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,

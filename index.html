@@ -306,11 +306,15 @@
             <div class="form-group">
                 <label for="speechifyTtsVoice">Голос</label>
                 <select id="speechifyTtsVoice" onchange="saveSettings()">
-                    <option value="nadezhda">Nadezhda (женский, профессиональный)</option>
-                    <option value="elena">Elena (женский, дружелюбный)</option>
-                    <option value="maria">Maria (женский, молодой)</option>
-                    <option value="anna">Anna (женский, нейтральный)</option>
+                    <option value="george">George (мужской, английский)</option>
+                    <option value="sarah">Sarah (женский, английский)</option>
+                    <option value="david">David (мужской, английский)</option>
+                    <option value="emma">Emma (женский, английский)</option>
                     <option value="default">Default (стандартный голос)</option>
+                    <option value="nadezhda">Nadezhda (женский, русский)</option>
+                    <option value="elena">Elena (женский, русский)</option>
+                    <option value="maria">Maria (женский, русский)</option>
+                    <option value="anna">Anna (женский, русский)</option>
                 </select>
             </div>
 
@@ -825,7 +829,7 @@
             const yandexTtsApiKey = localStorage.getItem('yandexTtsApiKey') || (window.API_KEYS ? window.API_KEYS.yandex : '');
             const yandexTtsVoice = localStorage.getItem('yandexTtsVoice') || 'jane';
             const speechifyTtsApiKey = localStorage.getItem('speechifyTtsApiKey') || (window.API_KEYS ? window.API_KEYS.speechify : '');
-            const speechifyTtsVoice = localStorage.getItem('speechifyTtsVoice') || 'nadezhda';
+            const speechifyTtsVoice = localStorage.getItem('speechifyTtsVoice') || 'george';
             document.getElementById('elevenlabsTtsApiKey').value = elevenlabsTtsApiKey;
             document.getElementById('elevenlabsTtsVoice').value = elevenlabsTtsVoice;
             document.getElementById('yandexTtsApiKey').value = yandexTtsApiKey;
@@ -1688,7 +1692,7 @@
         // Генерация аудио Speechify (без воспроизведения)
         async function generateSpeechifyAudio(text) {
             const apiKey = localStorage.getItem('speechifyTtsApiKey');
-            const voice = localStorage.getItem('speechifyTtsVoice') || 'nadezhda';
+            const voice = localStorage.getItem('speechifyTtsVoice') || 'george';
             
             if (!apiKey) {
                 throw new Error('Speechify API key not provided');
@@ -1703,7 +1707,8 @@
                 },
                 body: JSON.stringify({
                     input: text,
-                    voiceId: voice
+                    voice_id: voice,
+                    audio_format: 'mp3'
                 })
             });
             
@@ -1718,7 +1723,7 @@
         async function generateSpeechifyAudioViaProxy(text) {
             const proxyUrl = localStorage.getItem('proxyUrl') || getOptimalProxyUrl();
             const apiKey = localStorage.getItem('speechifyTtsApiKey');
-            const voice = localStorage.getItem('speechifyTtsVoice') || 'nadezhda';
+            const voice = localStorage.getItem('speechifyTtsVoice') || 'george';
             
             const response = await fetch(`${proxyUrl}/api/tts/generate`, {
                 method: 'POST',
@@ -1979,7 +1984,7 @@
         // Speechify TTS
         async function speakWithSpeechify(text) {
             const apiKey = localStorage.getItem('speechifyTtsApiKey');
-            const voice = localStorage.getItem('speechifyTtsVoice') || 'nadezhda';
+            const voice = localStorage.getItem('speechifyTtsVoice') || 'george';
             
             if (!apiKey) {
                 throw new Error('Speechify API key not provided');
@@ -1995,7 +2000,8 @@
                     },
                     body: JSON.stringify({
                         input: text,
-                        voiceId: voice
+                        voice_id: voice,
+                        audio_format: 'mp3'
                     })
                 });
                 
@@ -2038,7 +2044,7 @@
             } else if (provider === 'yandex') {
                 return localStorage.getItem('yandexTtsVoice') || 'jane';
             } else if (provider === 'speechify') {
-                return localStorage.getItem('speechifyTtsVoice') || 'nadezhda';
+                return localStorage.getItem('speechifyTtsVoice') || 'george';
             }
             return null;
         }

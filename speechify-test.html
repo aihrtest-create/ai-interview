@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speechify API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 Speechify API Test</h1>
+        <p>Тестирование различных параметров Speechify TTS API</p>
+        
+        <div class="form-group">
+            <label for="apiKey">API Key:</label>
+            <input type="password" id="apiKey" placeholder="Введите ваш Speechify API ключ">
+        </div>
+        
+        <div class="form-group">
+            <label for="text">Текст для озвучки:</label>
+            <textarea id="text" rows="3" placeholder="Введите текст для озвучки">Привет! Это тест Speechify TTS API.</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="voiceId">Voice ID:</label>
+            <select id="voiceId">
+                <option value="nadezhda">nadezhda</option>
+                <option value="elena">elena</option>
+                <option value="maria">maria</option>
+                <option value="anna">anna</option>
+                <option value="default">default</option>
+                <option value="russian-female">russian-female</option>
+                <option value="ru-female">ru-female</option>
+                <option value="female">female</option>
+                <option value="voice-1">voice-1</option>
+                <option value="voice-2">voice-2</option>
+            </select>
+        </div>
+        
+        <button onclick="testSpeechifyAPI()">🎵 Тестировать Speechify API</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Результат:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testSpeechifyAPI() {
+            const apiKey = document.getElementById('apiKey').value;
+            const text = document.getElementById('text').value;
+            const voiceId = document.getElementById('voiceId').value;
+            
+            if (!apiKey) {
+                showResult('Ошибка: Введите API ключ', 'error');
+                return;
+            }
+            
+            if (!text) {
+                showResult('Ошибка: Введите текст для озвучки', 'error');
+                return;
+            }
+            
+            showResult('Тестирование...', '');
+            
+            try {
+                // Тест 1: Базовый запрос
+                console.log('Тест 1: Базовый запрос');
+                const response1 = await fetch('https://api.sws.speechify.com/v1/audio/speech', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        input: text,
+                        voiceId: voiceId
+                    })
+                });
+                
+                console.log('Response 1 status:', response1.status);
+                console.log('Response 1 headers:', [...response1.headers.entries()]);
+                
+                if (response1.ok) {
+                    const audioBlob = await response1.blob();
+                    showResult('✅ Успешно! Аудио получено', 'success');
+                    playAudio(audioBlob);
+                    return;
+                } else {
+                    const errorText = await response1.text();
+                    console.log('Error response 1:', errorText);
+                    
+                    // Тест 2: Попробуем другой формат
+                    console.log('Тест 2: Альтернативный формат');
+                    const response2 = await fetch('https://api.sws.speechify.com/v1/audio/speech', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            voice: voiceId
+                        })
+                    });
+                    
+                    console.log('Response 2 status:', response2.status);
+                    
+                    if (response2.ok) {
+                        const audioBlob = await response2.blob();
+                        showResult('✅ Успешно! Аудио получено (альтернативный формат)', 'success');
+                        playAudio(audioBlob);
+                        return;
+                    } else {
+                        const errorText2 = await response2.text();
+                        console.log('Error response 2:', errorText2);
+                        
+                        // Тест 3: Попробуем другой эндпоинт
+                        console.log('Тест 3: Альтернативный эндпоинт');
+                        const response3 = await fetch('https://api.sws.speechify.com/v1/tts', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${apiKey}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                input: text,
+                                voiceId: voiceId
+                            })
+                        });
+                        
+                        console.log('Response 3 status:', response3.status);
+                        
+                        if (response3.ok) {
+                            const audioBlob = await response3.blob();
+                            showResult('✅ Успешно! Аудио получено (альтернативный эндпоинт)', 'success');
+                            playAudio(audioBlob);
+                            return;
+                        } else {
+                            const errorText3 = await response3.text();
+                            console.log('Error response 3:', errorText3);
+                            
+                            showResult(`❌ Все тесты не удались:<br>
+                                <strong>Тест 1:</strong> ${response1.status} - ${errorText}<br>
+                                <strong>Тест 2:</strong> ${response2.status} - ${errorText2}<br>
+                                <strong>Тест 3:</strong> ${response3.status} - ${errorText3}`, 'error');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                showResult(`❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const result = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            result.style.display = 'block';
+            result.className = `result ${type}`;
+            resultContent.innerHTML = message;
+        }
+        
+        function playAudio(audioBlob) {
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            
+            const resultContent = document.getElementById('resultContent');
+            resultContent.innerHTML += `<br><br><audio controls><source src="${audioUrl}" type="audio/mpeg">Ваш браузер не поддерживает аудио элемент.</audio>`;
+            
+            audio.play().catch(e => {
+                console.error('Audio play error:', e);
+                resultContent.innerHTML += `<br><br>❌ Ошибка воспроизведения: ${e.message}`;
+            });
+        }
+    </script>
+</body>
+</html>
