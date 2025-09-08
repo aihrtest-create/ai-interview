@@ -12,6 +12,14 @@
       "dest": "proxy-server/server.js"
     },
     {
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/index.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "proxy-server/server.js"
     }
