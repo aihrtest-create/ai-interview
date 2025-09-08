@@ -160,6 +160,8 @@ app.post('/api/tts', async (req, res) => {
             audioBlob = await callElevenLabsTTS(text, voice, apiKey);
         } else if (provider === 'yandex') {
             audioBlob = await callYandexTTS(text, voice, apiKey);
+        } else if (provider === 'speechify') {
+            audioBlob = await callSpeechifyTTS(text, voice, apiKey);
         } else {
             return res.status(400).json({ error: 'Unsupported TTS provider' });
         }
@@ -194,6 +196,8 @@ app.post('/api/tts/generate', async (req, res) => {
             audioBlob = await callElevenLabsTTS(text, voice, apiKey);
         } else if (provider === 'yandex') {
             audioBlob = await callYandexTTS(text, voice, apiKey);
+        } else if (provider === 'speechify') {
+            audioBlob = await callSpeechifyTTS(text, voice, apiKey);
         } else {
             return res.status(400).json({ error: 'Unsupported TTS provider' });
         }
@@ -311,6 +315,33 @@ async function callYandexTTS(text, voice, apiKey) {
     } catch (error) {
         console.error('Yandex TTS error:', error.response?.data || error.message);
         throw new Error(`Yandex TTS failed: ${error.response?.data || error.message}`);
+    }
+}
+
+// Speechify TTS function
+async function callSpeechifyTTS(text, voice, apiKey) {
+    try {
+        console.log('Speechify TTS request:', { text: text.substring(0, 50) + '...', voice, apiKey: apiKey ? 'Present' : 'Missing' });
+        
+        const response = await axios.post('https://api.sws.speechify.com/v1/tts/audio/speech', {
+            text: text,
+            voice: voice,
+            format: 'mp3',
+            speed: 1.0
+        }, {
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            responseType: 'arraybuffer',
+            timeout: 30000
+        });
+
+        console.log('Speechify TTS response:', { status: response.status, dataSize: response.data.length });
+        return Buffer.from(response.data);
+    } catch (error) {
+        console.error('Speechify TTS error:', error.response?.data || error.message);
+        throw new Error(`Speechify TTS failed: ${error.response?.data || error.message}`);
     }
 }
 

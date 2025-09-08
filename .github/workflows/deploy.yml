@@ -59,7 +59,10 @@ jobs:
               gemini: '${{ secrets.GEMINI_API_KEY }}',
               
               // Deepgram API Key
-              deepgram: '${{ secrets.DEEPGRAM_API_KEY }}'
+              deepgram: '${{ secrets.DEEPGRAM_API_KEY }}',
+              
+              // Speechify API Key
+              speechify: '${{ secrets.SPEECHIFY_API_KEY }}'
           };
           EOF
 
