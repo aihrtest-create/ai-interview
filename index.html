@@ -31,9 +31,9 @@
 
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn btn-green" onclick="startInterview()">
-                        Начать тренировку →
+                        ▶️
                     </button>
-                    <button class="settings-btn" onclick="toggleSettings()">⚙️ Настройки</button>
+                    <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
                 </div>
             </div>
         </div>
@@ -48,8 +48,8 @@
                         <span class="model-badge" id="modelBadge">GPT-4o</span>
                     </h3>
                     <div>
-                        <button class="settings-btn" onclick="toggleSettings()">⚙️ Настройки</button>
-                        <button class="btn-secondary btn" onclick="backToSetup()">← Назад</button>
+                        <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+                        <button class="btn-secondary btn" onclick="backToSetup()">←</button>
                     </div>
                 </div>
 
@@ -71,14 +71,14 @@
                         <button class="tts-btn" id="ttsBtn" onclick="toggleTts()" title="Озвучка ответов">
                             🔊
                         </button>
-                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Отправить</button>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">→</button>
                     </div>
                     <div class="chat-actions">
                         <button class="btn btn-secondary" id="downloadInterviewBtn" onclick="downloadInterview()" style="display: none;">
-                            💾 Скачать интервью
+                            💾
                         </button>
                         <button class="btn btn-secondary" id="endInterviewBtn" onclick="endInterview()" style="display: none;">
-                            📊 Завершить интервью и получить отчет
+                            📊
                         </button>
                     </div>
                 </div>
@@ -428,7 +428,7 @@
 - Фокусируйся на развитии кандидата</textarea>
         </div>
 
-        <button class="btn" onclick="saveSettings(); testConnection();">💾 Сохранить и проверить</button>
+        <button class="btn" onclick="saveSettings(); testConnection();">💾</button>
     </div>
 
     <!-- Модальное окно для отчета -->
@@ -445,9 +445,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="downloadReport()">💾 Скачать отчет</button>
-                <button class="btn btn-primary" onclick="startNewInterview()">🔄 Новое интервью</button>
-                <button class="btn" onclick="closeReportModal()">Закрыть</button>
+                <button class="btn btn-secondary" onclick="downloadReport()">💾</button>
+                <button class="btn btn-primary" onclick="startNewInterview()">🔄</button>
+                <button class="btn" onclick="closeReportModal()">✕</button>
             </div>
         </div>
     </div>
