@@ -780,18 +780,17 @@
 
         // Загрузка настроек
         function loadSettings() {
-            const provider = localStorage.getItem('llmProvider') || 'openrouter';
-            const apiMode = localStorage.getItem('apiMode') || getOptimalApiMode();
+            const provider = localStorage.getItem('llmProvider') || 'gemini';
+            const apiMode = localStorage.getItem('apiMode') || 'direct';
             const proxyUrl = localStorage.getItem('proxyUrl') || getOptimalProxyUrl();
             const sttProxyUrl = localStorage.getItem('sttProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
             const ttsProxyUrl = localStorage.getItem('ttsProxyUrl') || 'https://ai-interview-mu-nine.vercel.app';
             const systemPrompt = localStorage.getItem('systemPrompt') || document.getElementById('systemPrompt').value;
             const reportPrompt = localStorage.getItem('reportPrompt') || document.getElementById('reportPrompt').value;
-            const sttProvider = localStorage.getItem('sttProvider') || 'browser';
-            const sttApiMode = localStorage.getItem('sttApiMode') || (window.location.protocol === 'file:' ? 'proxy' : 'direct');
-            const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
-            const ttsApiMode = localStorage.getItem('ttsApiMode') || 
-                (ttsProvider === 'browser' ? 'direct' : (window.location.protocol === 'file:' ? 'proxy' : 'direct'));
+            const sttProvider = localStorage.getItem('sttProvider') || 'deepgram';
+            const sttApiMode = localStorage.getItem('sttApiMode') || 'proxy';
+            const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
+            const ttsApiMode = localStorage.getItem('ttsApiMode') || 'proxy';
             
             document.getElementById('llmProvider').value = provider;
             document.getElementById('apiMode').value = apiMode;
@@ -868,7 +867,7 @@
             // Для AI сообщений
             if (sender === 'ai') {
                 // Если TTS включен и не браузерный - ждем генерации аудио
-                const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+                const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
                 if (ttsEnabled && ttsProvider !== 'browser') {
                     addMessageWithTtsDelay(text, time, messageDiv, messagesContainer);
                 } else {
@@ -961,7 +960,7 @@
 
         // Генерация аудио для TTS (без воспроизведения)
         async function generateTtsAudio(text) {
-            const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+            const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
             const ttsApiMode = localStorage.getItem('ttsApiMode') || 'direct';
             
             if (ttsProvider === 'elevenlabs') {
@@ -1015,7 +1014,7 @@
 
         // Вызов LLM API
         async function callLLMAPI(userMessage, isTest = false) {
-            const provider = localStorage.getItem('llmProvider') || 'openrouter';
+            const provider = localStorage.getItem('llmProvider') || 'gemini';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
             if (apiMode === 'proxy') {
@@ -1276,7 +1275,7 @@
 
         // Переключение записи
         async function toggleRecording() {
-            const sttProvider = localStorage.getItem('sttProvider') || 'browser';
+            const sttProvider = localStorage.getItem('sttProvider') || 'deepgram';
             
             if (isRecording) {
                 stopRecording();
@@ -1749,7 +1748,7 @@
         async function speakText(text) {
             if (!ttsEnabled || !text) return;
             
-            const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+            const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
             const ttsApiMode = localStorage.getItem('ttsApiMode') || 'direct';
             
             try {
@@ -1772,7 +1771,7 @@
                 console.error('TTS error:', error);
                 
                 // Если внешний TTS не работает, пробуем браузерный
-                const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+                const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
                 if (ttsProvider !== 'browser') {
                     console.log('Falling back to browser TTS...');
                     try {
@@ -2395,7 +2394,7 @@ ${conversationHistory.map(msg =>
             // Для AI сообщений
             if (sender === 'ai') {
                 // Если TTS включен и не браузерный - ждем генерации аудио
-                const ttsProvider = localStorage.getItem('ttsProvider') || 'browser';
+                const ttsProvider = localStorage.getItem('ttsProvider') || 'yandex';
                 if (ttsEnabled && ttsProvider !== 'browser') {
                     addMessageWithTtsDelay(text, time, messageDiv, messagesContainer);
                 } else {
@@ -2435,7 +2434,7 @@ ${conversationHistory.map(msg =>
 
         // Обновленная функция вызова LLM API для поддержки генерации отчета
         async function callLLMAPI(userMessage, isTest = false, isReport = false) {
-            const provider = localStorage.getItem('llmProvider') || 'openrouter';
+            const provider = localStorage.getItem('llmProvider') || 'gemini';
             const apiMode = localStorage.getItem('apiMode') || 'direct';
             
             if (apiMode === 'proxy') {
